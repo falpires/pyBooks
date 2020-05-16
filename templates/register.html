@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %} Register {% endblock %}
+
+{% block body %}
+<form action="{{ url_for('register') }}" method="POST">
+    <label for="name">Username:</label>
+    <input type="text" id="name" name="name" required><br>
+    <label for="passwd">Password:</label>
+    <input type="password" id="passwd" name="passwd" onkeyup="check()" required><br>
+    <label for="confirm">Confirm your password:</label>
+    <input type="password" id="confirm" name="confirm" onkeyup="check()" required><br>
+    <input type="submit" value="Submit" id="submit">
+</form>
+<script>
+    var check = function() {
+        var submit = document.getElementById("submit");
+        if (document.getElementById("passwd").value == document.getElementById("confirm").value) {
+            submit.disabled = false;
+        }
+        else {
+            submit.disabled = true;
+        }
+    }
+</script>
+{% endblock %}
