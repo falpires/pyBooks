@@ -1,8 +1,8 @@
 import os
 
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template, request, url_for, redirect
 from flask_session import Session
-from flask.ext.bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
@@ -49,18 +49,40 @@ def register():
             return "Passwords do not match"
 
         # Check if username is not already in use
-        exists = db.execute("SELECT username FROM users WHERE username = :username",
-                            {"username": username})
-        if exists:
+        if db.execute("SELECT username FROM users WHERE username = :username",
+                            {"username": username}).rowcount >= 1:
             return render_template("register.html", message="Username already in use")
-            
+
         # Generate password hash for storing the password
-        pw_hash = bcrypt.generate_password_hash(password)
+        pw_hash = bcrypt.generate_password_hash(password).decode("utf-8")
         
         # Execute DB Query to insert into users
         db.execute("INSERT INTO users (username, password) VALUES (:username, :password)", 
                    {"username":username, "password":pw_hash})
         db.commit()
+        return redirect(url_for("login"))
     else:
         return render_template("register.html")
+
+@app.route("/login", methods=["GET","POST"])
+def login():
+    if request.method == "POST":
+        username = request.form.get("name")
+        password = request.form.get("passwd")
+
+        # Check for values missing
+        if not username or not password:
+            return "Input a valid username and/or password"
+        
+        user = db.execute("SELECT * FROM users WHERE username = :username",
+                          {"username": username}).fetchone()
+        if not user:
+            return "Some error has ocurred"
+        if bcrypt.check_password_hash(user["password"], password):
+            session["user_id"] = user["id"]    
+            return "Logged in?"
+        return "Password and/or user not match"
+    else:
+        return render_template("login.html")
+
 
