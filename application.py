@@ -6,6 +6,8 @@ from flask_bcrypt import Bcrypt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
+from helpers import login_required
+
 app = Flask(__name__)
 
 # Check for environment variable
@@ -17,6 +19,7 @@ if not os.getenv("API_KEY"):
 # Configure session to use filesystem
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.config["SECRET_KEY"] = os.getenv("FLASK_SECRET")
 Session(app)
 
 # Set up database
@@ -27,8 +30,8 @@ db = scoped_session(sessionmaker(bind=engine))
 
 bcrypt = Bcrypt(app)
 
-
 @app.route("/")
+@login_required
 def index():
     return "Project 1: TODO"
 
@@ -79,10 +82,18 @@ def login():
         if not user:
             return "Some error has ocurred"
         if bcrypt.check_password_hash(user["password"], password):
-            session["user_id"] = user["id"]    
+            session["user_id"] = user["id"] 
             return "Logged in?"
         return "Password and/or user not match"
     else:
         return render_template("login.html")
 
 
+@app.route("/logout", methods=["GET","POST"])
+@login_required
+def logout():
+    if request.method == "POST":
+        session.pop("user_id", None)
+        return redirect(url_for("login"))
+    else:
+        return render_template("logout.html")
