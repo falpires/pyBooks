@@ -40,10 +40,19 @@ def register():
         username = request.form.get("name")
         password = request.form.get("passwd")
         confirm = request.form.get("confirm")
+
+        # Check for values missing
         if not username or not password:
             return "Input a valid username and/or password"
+        # Check if passwords match
         if confirm != password:
             return "Passwords do not match"
+
+        # Check if username is not already in use
+        exists = db.execute("SELECT username FROM users WHERE username = :username",
+                            {"username": username})
+        if exists:
+            return render_template("register.html", message="Username already in use")
         # Generate password hash for storing the password
         pw_hash = bcrypt.generate_password_hash(password)
         
@@ -53,3 +62,4 @@ def register():
         db.commit()
     else:
         return render_template("register.html")
+
