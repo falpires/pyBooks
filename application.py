@@ -97,3 +97,11 @@ def logout():
         return redirect(url_for("login"))
     else:
         return render_template("logout.html")
+
+@app.route("/search", methods=["GET", "POST"])
+@login_required
+def search():
+    if request.method == "POST":
+        return "WIP"
+    else:
+        return "WIP"
