@@ -53,6 +53,7 @@ def register():
                             {"username": username})
         if exists:
             return render_template("register.html", message="Username already in use")
+            
         # Generate password hash for storing the password
         pw_hash = bcrypt.generate_password_hash(password)
         
