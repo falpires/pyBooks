@@ -11,6 +11,8 @@ def main():
     with open("books.csv", "r") as csvfile:
         readCSV = csv.reader(csvfile)
         for isbn, title, author, year in readCSV:
+            if isbn == "isbn":
+                continue
             db.execute("INSERT INTO books (isbn, title, author, year) VALUES (:isbn, :title, :author, :year)",
                     {"isbn":isbn, "title":title, "author":author, "year":int(year)})
             print(f"Added book {title} into table ")
