@@ -4,4 +4,3 @@ __pycache__
 env.ps1
 .vscode
 flask_session
-flask_session/*
