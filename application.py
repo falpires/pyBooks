@@ -118,7 +118,7 @@ def search():
             QUERY = "SELECT * FROM books WHERE author LIKE :value"
         elif filter_by == "title":
             QUERY = "SELECT * FROM books WHERE title LIKE :value"
-        elif filter_by == "title":
+        elif filter_by == "isbn":
             QUERY = "SELECT * FROM books WHERE isbn LIKE :value"
 
         # It turned out that i had to do this for LIKE clause... I don't like it at all...
