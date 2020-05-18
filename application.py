@@ -138,4 +138,12 @@ def search():
 @app.route("/book/<int:id>")
 @login_required
 def book(id):
-    return "WIP"
+    '''
+    Page showing the detais of a book by it's ID
+    '''
+
+    book = db.execute("SELECT title, author, year, isbn FROM books WHERE id = :id", {"id":id}).fetchone()
+
+    reviews = db.execute("SELECT rating, review FROM reviews WHERE book_id = :id", {"id":id}).fetchall()
+
+    return render_template("book.html", book=book, reviews=reviews)

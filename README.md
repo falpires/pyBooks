@@ -14,7 +14,7 @@ Web Programming with Python and JavaScript
 ## To create a virtual environment for this project
 
 - Run "python -m venv .env"
-- Run the "activate" script. It is under "./env/scripts" and is named "activate". The bat one is for windows CMD, the ps1 is for Powershell, and the one without extension is for shell.
+- Run the "activate" script. It is under "./env/scripts" and is named "activate". The bat one is for windows CMD, the ps1 is for Powershell, and the one without extension is for linux bash/shell.
 
 
 
@@ -26,7 +26,7 @@ Web Programming with Python and JavaScript
 - [x] Logout
 - [x] Import
 - [x] Search (ISBN, Title or Author)
-- [ ] Book page (Page with details of the book, showing Title, Author, Year, ISBN Number, and reviews from my DB)
+- [x] Book page (Page with details of the book, showing Title, Author, Year, ISBN Number, and reviews from my DB)
 - [ ] Goodreads Review Data (Should show on the book page, average review and number of reviews)
 - [ ] Review Submission (1 to 5 rating, and text about the rating) Only one per user/book
 - [ ] API for route(/api/<string:isbn>) should show json containing: {"title", "author", "year", "isbn", "review_count", "average_score"}

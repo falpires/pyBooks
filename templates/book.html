@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %} {{book["title"]}} {% endblock %}
+
+{% block body %}
+    <h1>
+        {{ book["title"] }} 
+    </h1>
+    <p>
+        Author: {{ book["author"] }}
+    </p>
+    <p>
+        Publication Year: {{ book["year"] }}
+    </p>
+    <p>
+        ISBN: {{ book["isbn"] }}
+    </p>
+    {% if reviews is defined %}
+    <div id="reviews">
+        <h7>
+            Reviews:
+        </h7>
+            {% for review in reviews %}
+            <ul>
+                <li>
+                    <span>Rating: {{ review["rating"] }}</span>
+                    <span>Review: {{ review["review"] }}</span>
+                </li>
+            </ul>
+            {% endfor %}
+        {% else %}
+        <h7>
+            This book has no reviews yet, do you want to <a href="{{ url_for('review') }}">submit</a> a review?
+        </h7>    
+    </div>
+    {% endif %}
+{% endblock %}
