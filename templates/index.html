@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %} Pybooks {% endblock %}
+
+{% block body %}
+<main>
+    <div>
+        <h1>Welcome to Alferpir's Pybooks!</h1>
+    </div>
+    <p>
+        In this site you can search for books, view details about it, and submit reviews to a book!
+    </p>
+    <p>
+        To be able to search for books and make submissions you have to be logged on!
+        <a href="{{ url_for('login') }}">Log in!</a>
+        <a href="{{ url_for('register') }}">Register</a>
+    </p>
+</main>

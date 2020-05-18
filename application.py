@@ -32,7 +32,7 @@ bcrypt = Bcrypt(app)
 
 @app.route("/")
 def index():
-    return "Project 1: TODO"
+    return render_template("index.html")
 
 @app.route("/register", methods=["GET","POST"])
 def register():
