@@ -100,6 +100,9 @@ def logout():
 @app.route("/search", methods=["GET", "POST"])
 @login_required
 def search():
+    '''
+    Later i want it to be only "GET" method, as there is no sensitive information to be placed in this form
+    '''
     if request.method == "POST":
         filter_by = request.form.get("filter")
         if not filter_by:
@@ -113,6 +116,7 @@ def search():
         My dream was to actually use the WHERE clause by placing dynamic values, but it doesn't turned well, 
         because the sqlalchemy lib puts the WHERE filter with '' in it, and it causes the Query to not return anything...
         In this case i will use if's and elif's... Maybe i could use jinja2 to render the query, but will test it later.
+        Or i'll not test it at all, i'm crazy to use the ORM!
         '''
         if filter_by == "author":
             QUERY = "SELECT * FROM books WHERE author LIKE :value"
@@ -130,3 +134,8 @@ def search():
         return render_template("search.html", books=books)
     else:
         return render_template("search.html")
+
+@app.route("/book/<int:id>")
+@login_required
+def book(id):
+    return "WIP"

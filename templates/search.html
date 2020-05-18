@@ -17,7 +17,17 @@
     {% if books is defined %}
         <ul>
             {% for book in books %}
-                <li>{{ book }}</li>
+                <li>
+                    <a href="/book/{{ book['id'] }}">
+                        <span>ISBN: {{ book["isbn"] }}</span>
+                        <br>
+                        <span>Title: {{ book["title"] }}</span>
+                        <br>
+                        <span>Author: {{ book["author"] }}</span>
+                        <br>
+                        <span>Publication Year: {{ book["year"] }}</span>
+                    </a>
+                </li>
             {% endfor %}
         </ul>
     {% endif %}
