@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}Search{% endblock %}
+
+{% block body %}
+    <form action="{{ url_for('search') }}" method="POST">
+        <label for="filter">Filter by:</label>
+        <select name="filter" id="filter">
+            <option value="author">Author</option>
+            <option value="isbn">ISBN</option>
+            <option value="title">Title</option>
+        </select>
+        <input type="text" name="search" placeholder="Search...">
+        <input type="submit" value="Go!">
+    </form>
+    <br>
+    {% if books is defined %}
+        <ul>
+            {% for book in books %}
+                <li>{{ book }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+    {% if error is defined %}
+        <h1>{{ error }}</h1>
+    {% endif %}
+{% endblock %}

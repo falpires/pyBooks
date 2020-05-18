@@ -31,7 +31,6 @@ db = scoped_session(sessionmaker(bind=engine))
 bcrypt = Bcrypt(app)
 
 @app.route("/")
-@login_required
 def index():
     return "Project 1: TODO"
 
@@ -102,6 +101,32 @@ def logout():
 @login_required
 def search():
     if request.method == "POST":
-        return "WIP"
+        filter_by = request.form.get("filter")
+        if not filter_by:
+            return "Please specify a filter"
+
+        value = request.form.get("search")
+        if not value:
+            return "Please specify a value" 
+        
+        '''
+        My dream was to actually use the WHERE clause by placing dynamic values, but it doesn't turned well, 
+        because the sqlalchemy lib puts the WHERE filter with '' in it, and it causes the Query to not return anything...
+        In this case i will use if's and elif's... Maybe i could use jinja2 to render the query, but will test it later.
+        '''
+        if filter_by == "author":
+            QUERY = "SELECT * FROM books WHERE author LIKE :value"
+        elif filter_by == "title":
+            QUERY = "SELECT * FROM books WHERE title LIKE :value"
+        elif filter_by == "title":
+            QUERY = "SELECT * FROM books WHERE isbn LIKE :value"
+
+        # It turned out that i had to do this for LIKE clause... I don't like it at all...
+        books = db.execute(QUERY, {"value": "%" + value + "%"}).fetchall()
+
+        if not books:
+            return render_template("search.html", error="Your search has not returned any results... Try again!")
+        
+        return render_template("search.html", books=books)
     else:
-        return "WIP"
+        return render_template("search.html")
