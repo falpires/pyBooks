@@ -34,4 +34,18 @@
         </h7>    
     </div>
     {% endif %}
+    <div id="goodreads">
+        <h4>
+            Goodreads data!
+        </h4>
+        <ul>
+        {% for book in goodreads_data["books"] %}
+            <li>
+                <span>Average Rating: {{ book["average_rating"] }}</span>
+                <br>
+                <span>Ratings: {{ book["work_ratings_count"] }}</span>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

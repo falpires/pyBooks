@@ -6,8 +6,8 @@ from flask_bcrypt import Bcrypt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-from helpers import login_required
-
+from helpers import login_required, goodreads
+ 
 app = Flask(__name__)
 
 # Check for environment variable
@@ -82,7 +82,7 @@ def login():
             return "Some error has ocurred"
         if bcrypt.check_password_hash(user["password"], password):
             session["user_id"] = user["id"] 
-            return "Logged in?"
+            return redirect(url_for("search"))
         return "Password and/or user not match"
     else:
         return render_template("login.html")
@@ -146,4 +146,6 @@ def book(id):
 
     reviews = db.execute("SELECT rating, review FROM reviews WHERE book_id = :id", {"id":id}).fetchall()
 
-    return render_template("book.html", book=book, reviews=reviews)
+    response = goodreads(api_key=os.getenv("API_KEY"), isbn=book["isbn"])
+
+    return render_template("book.html", book=book, reviews=reviews, goodreads_data=response)
