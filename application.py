@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session, render_template, request, url_for, redirect
+from flask import Flask, session, render_template, request, url_for, redirect, jsonify
 from flask_session import Session
 from flask_bcrypt import Bcrypt
 from sqlalchemy import create_engine
@@ -135,17 +135,75 @@ def search():
     else:
         return render_template("search.html")
 
-@app.route("/book/<int:id>")
+@app.route("/book/<int:id>", methods=["GET","POST"])
 @login_required
 def book(id):
     '''
     Page showing the detais of a book by it's ID
     '''
 
+    # POST is for posting the review!
+    if request.method == "POST":
+        rating = request.form.get("rating")
+        try:
+            rating = int(rating)
+        except ValueError:
+            return "You did not post a rating between 1 and 5"
+
+        if not rating or rating < 1 or rating > 5:
+            return "You did not post a rating between 1 and 5"
+        
+        review = request.form.get("review")
+        if not review:
+            review = ""
+
+        exists = db.execute("SELECT * FROM reviews WHERE user_id = :user_id",
+                    {"user_id": session["user_id"]}).rowcount >= 1
+        
+        if exists:
+            return "Only one review per user!"
+
+
+        db.execute("INSERT INTO reviews (rating, review, book_id, user_id) VALUES (:rating, :review, :book_id, :user_id)",
+                    {"rating":rating, "review": review, "book_id": id, "user_id": session["user_id"]})
+        db.commit()
+
+        return redirect(f"/book/{id}")
+
+    # If method is GET, run the below code
+
     book = db.execute("SELECT title, author, year, isbn FROM books WHERE id = :id", {"id":id}).fetchone()
 
+    # Maybe i should display the user that posted the review? Nah, i will leave it anonymous!
     reviews = db.execute("SELECT rating, review FROM reviews WHERE book_id = :id", {"id":id}).fetchall()
 
     response = goodreads(api_key=os.getenv("API_KEY"), isbn=book["isbn"])
 
     return render_template("book.html", book=book, reviews=reviews, goodreads_data=response)
+
+
+@app.route("/api/<isbn>")
+@login_required
+def api(isbn):
+    """ Returns json data of book by its ISBN
+
+    Arguments:
+        isbn {string} -- ISBN of book!
+    """
+    QUERY = "SELECT books.title, books.author, books.year, books.isbn, AVG(reviews.rating), COUNT(reviews.review) FROM books JOIN reviews ON (books.id = reviews.book_id) WHERE books.isbn = :isbn GROUP BY books.title, books.author, books.year, books.isbn;"
+
+    data = db.execute(QUERY, {"isbn":isbn}).fetchone()
+
+    json = {
+        "title": data["title"],
+        "author": data["author"],
+        "year": data["year"],
+        "isbn": data["isbn"],
+        "review_count": int(data["count"]),
+        "average_score": float(data["avg"])
+    }
+
+    if not data:
+        return jsonify({"Error":"Book not found"}), 404
+
+    return jsonify(json)

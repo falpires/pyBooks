@@ -30,7 +30,7 @@
             {% endfor %}
         {% else %}
         <h7>
-            This book has no reviews yet, do you want to <a href="{{ url_for('review') }}">submit</a> a review?
+            This book has no reviews yet, do you want to submit a review?
         </h7>    
     </div>
     {% endif %}
@@ -47,5 +47,15 @@
             </li>
         {% endfor %}
         </ul>
+    </div>
+    <div>
+        <h4>Post a review!</h4>
+        <form method="POST">
+            <label for="rating">Input a rating between 1 and 5</label>
+            <input type="number" id="rating" name="rating" min="1" max="5" required>
+            <label for="review">Input the text for the review! (Optional)</label>
+            <input type="text" id="review" name="review">
+            <input type="submit" value="Submit Review!">
+        </form>
     </div>
 {% endblock %}
