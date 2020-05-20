@@ -207,3 +207,7 @@ def api(isbn):
         return jsonify({"Error":"Book not found"}), 404
 
     return jsonify(json)
+
+@app.route("/about")
+def about():
+    return "About"

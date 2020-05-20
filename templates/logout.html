@@ -3,8 +3,8 @@
 {% block title %}Logout{% endblock %}
 
 {% block body %}
-<h1>Logout page</h1>
+<div class="form-style-2-heading">Do you really want to Log out?</div>
 <form id="logout-form" action="{{ url_for('logout') }}" method="POST">
-    <input type="submit" name="logout" value="Log out!">
+    <input type="submit" name="logout" value="Log out!" class="submit-form">
 </form>
 {% endblock %}
