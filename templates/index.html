@@ -11,8 +11,7 @@
         In this site you can search for books, view details about it, and submit reviews to a book!
     </p>
     {% if session["user_id"] %}
-    <form>
-        <form>
+        <form action="{{ url_for('search') }}">
             <label for="filter">Filter by:</label>
             <select name="filter" id="filter">
                 <option value="author">Author</option>
@@ -20,9 +19,8 @@
                 <option value="title">Title</option>
             </select>
             <input type="text" name="search" placeholder="Search...">
-            <button type="submit" formaction="{{ url_for('search') }}">Go!</button>
+            <button type="submit">Go!</button>
         </form>
-    </form>
     {% else %}
     <p>
         To be able to search for books and make submissions you have to be logged on!

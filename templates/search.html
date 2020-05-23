@@ -3,7 +3,7 @@
 {% block title %}Search{% endblock %}
 
 {% block body %}
-    <form action="{{ url_for('search') }}" method="GET">
+    <form action="{{ url_for('search') }}">
         <label for="filter">Filter by:</label>
         <select name="filter" id="filter">
             <option value="author">Author</option>
@@ -11,7 +11,7 @@
             <option value="title">Title</option>
         </select>
         <input type="text" name="search" placeholder="Search...">
-        <input type="submit" value="Go!">
+        <button type="submit">Go!</button>
     </form>
     <br>
     {% if books is defined %}
