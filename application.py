@@ -10,6 +10,12 @@ from helpers import login_required, goodreads
  
 app = Flask(__name__)
 
+#Configure X-Ray Middleware
+from aws_xray_sdk.core import xray_recorder
+from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
+
+xray_recorder.configure(service='My application')
+XRayMiddleware(app, xray_recorder)
 
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
