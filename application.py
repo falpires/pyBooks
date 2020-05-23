@@ -10,12 +10,14 @@ from helpers import login_required, goodreads
  
 app = Flask(__name__)
 
-#Configure X-Ray Middleware
-from aws_xray_sdk.core import xray_recorder
-from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
 
-xray_recorder.configure(service='My application')
-XRayMiddleware(app, xray_recorder)
+if os.getenv("ENABLE_XRAY"):
+    #Configure X-Ray Middleware
+    from aws_xray_sdk.core import xray_recorder
+    from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
+
+    xray_recorder.configure(service='My application')
+    XRayMiddleware(app, xray_recorder)
 
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
@@ -164,8 +166,8 @@ def book(id):
         if not review:
             review = ""
 
-        exists = db.execute("SELECT * FROM reviews WHERE user_id = :user_id",
-                    {"user_id": session["user_id"]}).rowcount >= 1
+        exists = db.execute("SELECT * FROM reviews WHERE user_id = :user_id AND book_id = :book_id",
+                    {"user_id": session["user_id"], "book_id": id}).rowcount >= 1
         
         if exists:
             return "Only one review per user!"
