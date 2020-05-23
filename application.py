@@ -106,43 +106,38 @@ def logout():
     else:
         return render_template("logout.html")
 
-@app.route("/search", methods=["GET", "POST"])
+@app.route("/search", methods=["GET"])
 @login_required
 def search():
-    '''
-    Later i want it to be only "GET" method, as there is no sensitive information to be placed in this form
-    '''
-    if request.method == "POST":
-        filter_by = request.form.get("filter")
-        if not filter_by:
-            return "Please specify a filter"
 
-        value = request.form.get("search")
-        if not value:
-            return "Please specify a value" 
+    filter_by = request.args.get("filter")
+    if not filter_by:
+        return redirect("/")
+
+    value = request.args.get("search")
+    if not value:
+        return redirect("/") 
         
-        '''
+    '''
         My dream was to actually use the WHERE clause by placing dynamic values, but it doesn't turned well, 
         because the sqlalchemy lib puts the WHERE filter with '' in it, and it causes the Query to not return anything...
         In this case i will use if's and elif's... Maybe i could use jinja2 to render the query, but will test it later.
         Or i'll not test it at all, i'm crazy to use the ORM!
-        '''
-        if filter_by == "author":
-            QUERY = "SELECT * FROM books WHERE author LIKE :value"
-        elif filter_by == "title":
-            QUERY = "SELECT * FROM books WHERE title LIKE :value"
-        elif filter_by == "isbn":
-            QUERY = "SELECT * FROM books WHERE isbn LIKE :value"
+    '''
+    if filter_by == "author":
+        QUERY = "SELECT * FROM books WHERE author LIKE :value"
+    elif filter_by == "title":
+        QUERY = "SELECT * FROM books WHERE title LIKE :value"
+    elif filter_by == "isbn":
+        QUERY = "SELECT * FROM books WHERE isbn LIKE :value"
 
-        # It turned out that i had to do this for LIKE clause... I don't like it at all...
-        books = db.execute(QUERY, {"value": "%" + value + "%"}).fetchall()
+    # It turned out that i had to do this for LIKE clause... I don't like it at all...
+    books = db.execute(QUERY, {"value": "%" + value + "%"}).fetchall()
 
-        if not books:
-            return render_template("search.html", error="Your search has not returned any results... Try again!")
+    if not books:
+        return render_template("search.html", error="Your search has not returned any results... Try again!")
         
-        return render_template("search.html", books=books)
-    else:
-        return render_template("search.html")
+    return render_template("search.html", books=books)
 
 @app.route("/book/<int:id>", methods=["GET","POST"])
 @login_required
