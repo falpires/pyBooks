@@ -10,6 +10,7 @@ from helpers import login_required, goodreads
  
 app = Flask(__name__)
 
+
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
     raise RuntimeError("DATABASE_URL is not set")
