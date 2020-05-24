@@ -30,4 +30,4 @@ Web Programming with Python and JavaScript
 - [x] Goodreads Review Data (Should show on the book page, average review and number of reviews)
 - [x] Review Submission (1 to 5 rating, and text about the rating) Only one per user/book
 - [x] API for route(/api/<string:isbn>) should show json containing: {"title", "author", "year", "isbn", "review_count", "average_score"}
-- [ ] Style it all! CSS!
+- [x] Style it all! CSS!
