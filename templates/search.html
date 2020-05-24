@@ -3,6 +3,7 @@
 {% block title %}Search{% endblock %}
 
 {% block body %}
+<div class="index-search">
     <form action="{{ url_for('search') }}">
         <label for="filter">Filter by:</label>
         <select name="filter" id="filter">
@@ -11,23 +12,26 @@
             <option value="title">Title</option>
         </select>
         <input type="text" name="search" placeholder="Search...">
-        <button type="submit">Go!</button>
+        <input type="submit" value="Go!">
     </form>
-    <br>
+</div>
     {% if books is defined %}
-        <ul>
+        <ul class="unstyled-list">
             {% for book in books %}
-                <li>
-                    <a href="/book/{{ book['id'] }}">
-                        <span>ISBN: {{ book["isbn"] }}</span>
-                        <br>
-                        <span>Title: {{ book["title"] }}</span>
-                        <br>
-                        <span>Author: {{ book["author"] }}</span>
-                        <br>
-                        <span>Publication Year: {{ book["year"] }}</span>
-                    </a>
-                </li>
+            <a href="/book/{{ book['id'] }}" class="book-link">
+                <div class="book">
+                    <li>
+                        <h4 class="book-title">{{ book["title"] }}</h4>
+                        <div class="book-details">
+                            <small>
+                                ISBN: {{ book["isbn"] }}
+                                Author: {{ book["author"] }}
+                                Publication Year: {{ book["year"] }}
+                            </small>
+                        </div>
+                    </li>
+                </div>
+            </a>
             {% endfor %}
         </ul>
     {% endif %}

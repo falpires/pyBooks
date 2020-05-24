@@ -6,6 +6,8 @@
     --bg-primary: #bebb9d;
     --bg-secondary: #b1a916;
     --transition-speed: 600ms;
+    --link-color: #d8d7c5;
+    --link-color-hover: #cccab3;
 }
 
 
@@ -105,7 +107,70 @@ body::-webkit-scrollbar-thumb {
 	-webkit-box-shadow: 1px 1px 4px #DADADA;
 	border-radius: 3px;
 	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
+    -moz-border-radius: 3px;
+}
+
+input[type=submit] {
+    background-color: var(--bg-primary);
+    border-radius: 1rem;
+    padding: 0.3rem;
+    border-style: solid;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: var(--bg-secondary);
+    border-radius: 1rem;
+    padding: 0.3rem;
+    border-style: ridge;
+}
+
+.book {
+    padding: 0.3rem;
+    transition: var(--transition-speed);
+    color: var(--text-primary);
+    background-color: inherit;
+}
+
+.book:hover {
+    background-color: var(--link-color);
+    color: var(--text-secondary);
+}
+
+.book-link {
+    color: inherit;
+    text-decoration: unset;
+}
+
+.index-search {
+    position: relative;
+    text-align: center;
+}
+
+.index-search input[type=text] {
+    border-radius: 1.5rem;
+    padding: 0.5rem;
+}
+
+.index-search select {
+    padding: 0.5rem;
+    border-style: ridge;
+}
+
+.unstyled-list {
+    list-style-type: none;
+}
+
+.review-item {
+    border-bottom: dashed;
+    border-color: var(--bg-primary);
+    padding: 0.5rem;
+}
+
+h5 {
+    border-bottom: groove;
+    padding: 0.2rem;
+    border-color: var(--bg-primary);
 }
 
 /* Large Screens */

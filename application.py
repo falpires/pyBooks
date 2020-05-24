@@ -146,6 +146,10 @@ def book(id):
     Page showing the detais of a book by it's ID
     '''
 
+    # This data will be used for both GET and POST
+    exists = db.execute("SELECT * FROM reviews WHERE user_id = :user_id AND book_id = :book_id",
+                    {"user_id": session["user_id"], "book_id": id}).rowcount >= 1
+
     # POST is for posting the review!
     if request.method == "POST":
         rating = request.form.get("rating")
@@ -161,9 +165,6 @@ def book(id):
         if not review:
             review = ""
 
-        exists = db.execute("SELECT * FROM reviews WHERE user_id = :user_id AND book_id = :book_id",
-                    {"user_id": session["user_id"], "book_id": id}).rowcount >= 1
-        
         if exists:
             return "Only one review per user!"
 
@@ -183,7 +184,7 @@ def book(id):
 
     response = goodreads(api_key=os.getenv("API_KEY"), isbn=book["isbn"])
 
-    return render_template("book.html", book=book, reviews=reviews, goodreads_data=response)
+    return render_template("book.html", book=book, reviews=reviews, goodreads_data=response, exists=exists)
 
 
 @app.route("/api/<isbn>")
@@ -214,4 +215,4 @@ def api(isbn):
 
 @app.route("/about")
 def about():
-    return "About"
+    return render_template("about.html")
